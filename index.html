@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Carbon Emission Reduction Game</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <script>
+        function checkSelection() {
+            const checkboxes = document.querySelectorAll('input[name="policies"]:checked');
+            if (checkboxes.length !== 5) {
+                alert('You must select exactly 5 policies.');
+                return false;
+            }
+            return true;
+        }
+
+        function limitSelection(maxSelection) {
+            const checkboxes = document.querySelectorAll('input[name="policies"]');
+            checkboxes.forEach(checkbox => {
+                checkbox.addEventListener('change', function() {
+                    const checkedCount = document.querySelectorAll('input[name="policies"]:checked').length;
+                    if (checkedCount >= maxSelection) {
+                        checkboxes.forEach(box => {
+                            if (!box.checked) {
+                                box.disabled = true;
+                            }
+                        });
+                    } else {
+                        checkboxes.forEach(box => {
+                            box.disabled = false;
+                        });
+                    }
+                    if (checkbox.checked) {
+                        checkbox.parentNode.classList.add('selected');
+                    } else {
+                        checkbox.parentNode.classList.remove('selected');
+                    }
+                    updateCounter();
+                });
+            });
+        }
+
+        function updateCounter() {
+            const selectedCount = document.querySelectorAll('input[name="policies"]:checked').length;
+            document.getElementById('selected-count').innerText = `Selected: ${selectedCount}/5`;
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            limitSelection(5);
+            updateCounter();
+        });
+    </script>
+</head>
+<body>
+    <div class="container">
+        <h1>Carbon Emission Reduction Policies Game</h1>
+        <form action="/submit" method="POST" onsubmit="return checkSelection()">
+            <label for="name">Enter your name:</label>
+            <input type="text" id="name" name="name" required>
+            <h2>Select 5 policies you think are the most effective:</h2>
+            <div id="selected-count">Selected: 0/5</div>
+            <div class="policy-grid">
+                {% for policy in policies %}
+                    <label class="policy-block">
+                        <input type="checkbox" name="policies" value="{{ policy[0] }}|{{ policy[1] }}"> {{ policy[0] }}
+                    </label>
+                {% endfor %}
+            </div>
+            <button type="submit">Submit</button>
+        </form>
+        <button onclick="location.reload();">Start New Game</button>
+    </div>
+</body>
+</html>
