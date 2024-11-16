@@ -4,15 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Carbon Emission Reduction Game</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <link rel="stylesheet" href="styles.css">
     <script>
-        function checkSelection() {
-            const checkboxes = document.querySelectorAll('input[name="policies"]:checked');
-            if (checkboxes.length !== 5) {
-                alert('You must select exactly 5 policies.');
-                return false;
-            }
-            return true;
+        function updateCounter() {
+            const selectedCount = document.querySelectorAll('input[name="policies"]:checked').length;
+            document.getElementById('selected-count').innerText = `Selected: ${selectedCount}/5`;
         }
 
         function limitSelection(maxSelection) {
@@ -41,11 +37,6 @@
             });
         }
 
-        function updateCounter() {
-            const selectedCount = document.querySelectorAll('input[name="policies"]:checked').length;
-            document.getElementById('selected-count').innerText = `Selected: ${selectedCount}/5`;
-        }
-
         document.addEventListener('DOMContentLoaded', function() {
             limitSelection(5);
             updateCounter();
@@ -55,17 +46,42 @@
 <body>
     <div class="container">
         <h1>Carbon Emission Reduction Policies Game</h1>
-        <form action="/submit" method="POST" onsubmit="return checkSelection()">
+        <form>
             <label for="name">Enter your name:</label>
             <input type="text" id="name" name="name" required>
             <h2>Select 5 policies you think are the most effective:</h2>
             <div id="selected-count">Selected: 0/5</div>
             <div class="policy-grid">
-                {% for policy in policies %}
-                    <label class="policy-block">
-                        <input type="checkbox" name="policies" value="{{ policy[0] }}|{{ policy[1] }}"> {{ policy[0] }}
-                    </label>
-                {% endfor %}
+                <label class="policy-block">
+                    <input type="checkbox" name="policies" value="Tax carbon emissions to save the planet|10"> Tax carbon emissions to save the planet
+                </label>
+                <label class="policy-block">
+                    <input type="checkbox" name="policies" value="Subsidize green energy to fuel the future|9"> Subsidize green energy to fuel the future
+                </label>
+                <label class="policy-block">
+                    <input type="checkbox" name="policies" value="Trade carbon credits to cap pollution|8"> Trade carbon credits to cap pollution
+                </label>
+                <label class="policy-block">
+                    <input type="checkbox" name="policies" value="Invest in public transit to clear the air|7"> Invest in public transit to clear the air
+                </label>
+                <label class="policy-block">
+                    <input type="checkbox" name="policies" value="Enforce energy-saving rules for efficiency|8"> Enforce energy-saving rules for efficiency
+                </label>
+                <label class="policy-block">
+                    <input type="checkbox" name="policies" value="Capture and store carbon to clean the sky|7"> Capture and store carbon to clean the sky
+                </label>
+                <label class="policy-block">
+                    <input type="checkbox" name="policies" value="Drive electric cars to a cleaner tomorrow|9"> Drive electric cars to a cleaner tomorrow
+                </label>
+                <label class="policy-block">
+                    <input type="checkbox" name="policies" value="Build green homes for a sustainable living|8"> Build green homes for a sustainable living
+                </label>
+                <label class="policy-block">
+                    <input type="checkbox" name="policies" value="Conserve forests to trap carbon|9"> Conserve forests to trap carbon
+                </label>
+                <label class="policy-block">
+                    <input type="checkbox" name="policies" value="Farm sustainably to nourish the Earth|7"> Farm sustainably to nourish the Earth
+                </label>
             </div>
             <button type="submit">Submit</button>
         </form>
