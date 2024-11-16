@@ -6,9 +6,13 @@
     <title>Carbon Emission Reduction Game</title>
     <link rel="stylesheet" href="styles.css">
     <script>
-        function updateCounter() {
-            const selectedCount = document.querySelectorAll('input[name="policies"]:checked').length;
-            document.getElementById('selected-count').innerText = `Selected: ${selectedCount}/5`;
+        function checkSelection() {
+            const checkboxes = document.querySelectorAll('input[name="policies"]:checked');
+            if (checkboxes.length !== 5) {
+                alert('You must select exactly 5 policies.');
+                return false;
+            }
+            return true;
         }
 
         function limitSelection(maxSelection) {
@@ -37,16 +41,41 @@
             });
         }
 
+        function updateCounter() {
+            const selectedCount = document.querySelectorAll('input[name="policies"]:checked').length;
+            document.getElementById('selected-count').innerText = `Selected: ${selectedCount}/5`;
+        }
+
+        function calculateScore() {
+            const checkboxes = document.querySelectorAll('input[name="policies"]:checked');
+            let totalScore = 0;
+            checkboxes.forEach(checkbox => {
+                const score = parseInt(checkbox.value.split('|')[1]);
+                totalScore += score;
+            });
+            return totalScore;
+        }
+
+        function handleSubmit(event) {
+            event.preventDefault();
+            if (checkSelection()) {
+                const score = calculateScore();
+                const url = `result.html?score=${score}`;
+                window.location.href = url;
+            }
+        }
+
         document.addEventListener('DOMContentLoaded', function() {
             limitSelection(5);
             updateCounter();
+            document.querySelector('form').addEventListener('submit', handleSubmit);
         });
     </script>
 </head>
 <body>
     <div class="container">
         <h1>Carbon Emission Reduction Policies Game</h1>
-        <form action="result.html" method="GET" onsubmit="return checkSelection()">
+        <form>
             <label for="name">Enter your name:</label>
             <input type="text" id="name" name="name" required>
             <h2>Select 5 policies you think are the most effective:</h2>
