@@ -4,13 +4,20 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Result</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
     <div class="container">
-        <h1>Game Over</h1>
-        <p>Your total score is: {{ score }}</p>
-        <button onclick="window.location.href='/'">Start New Game</button>
+        <h1>Thank You for Participating!</h1>
+        <p>Your total score is: <span id="score"></span></p>
+        <button onclick="window.location.href='index.html'">Start New Game</button>
     </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const score = urlParams.get('score');
+            document.getElementById('score').innerText = score;
+        });
+    </script>
 </body>
 </html>
